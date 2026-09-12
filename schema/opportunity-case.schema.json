@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Loofy147/Residual-Opportunity-Scanner/schema/opportunity-case.schema.json",
+  "title": "Residual Opportunity Case",
+  "type": "object",
+  "required": ["case_id", "subject", "subject_type", "status", "evidence", "signals", "scores", "decision"],
+  "properties": {
+    "case_id": {"type": "string", "pattern": "^[A-Z0-9][A-Z0-9._-]+$"},
+    "subject": {"type": "string", "minLength": 1},
+    "subject_type": {"enum": ["deprecated_api", "dataset", "namespace", "domain", "host", "service", "repository", "web_graph_node", "other"]},
+    "status": {"enum": ["candidate", "verified", "rejected", "watch", "pursue"]},
+    "as_of": {"type": "string", "format": "date"},
+    "description": {"type": "string"},
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["evidence_id", "claim", "source", "status"],
+        "properties": {
+          "evidence_id": {"type": "string"},
+          "claim": {"type": "string"},
+          "source": {"type": "string", "format": "uri"},
+          "observed_at": {"type": "string", "format": "date"},
+          "status": {"enum": ["ESTABLISHED", "EXPERIMENTALLY_SUPPORTED", "USER_REPORTED", "INFERENCE", "HYPOTHESIS", "CONTRADICTED", "UNKNOWN", "OPEN"]},
+          "notes": {"type": "string"}
+        }
+      }
+    },
+    "signals": {
+      "type": "object",
+      "required": ["dependency", "migration_pressure", "substitution_gap", "reuse_leverage"],
+      "properties": {
+        "dependency": {"type": "integer", "minimum": 0, "maximum": 5},
+        "migration_pressure": {"type": "integer", "minimum": 0, "maximum": 5},
+        "substitution_gap": {"type": "integer", "minimum": 0, "maximum": 5},
+        "reuse_leverage": {"type": "integer", "minimum": 0, "maximum": 5},
+        "differentiation": {"type": "integer", "minimum": 0, "maximum": 5},
+        "legal_friction": {"type": "integer", "minimum": 0, "maximum": 5},
+        "verification_cost": {"type": "integer", "minimum": 0, "maximum": 5}
+      }
+    },
+    "scores": {
+      "type": "object",
+      "required": ["opportunity", "confidence"],
+      "properties": {
+        "opportunity": {"type": "number", "minimum": 0, "maximum": 100},
+        "confidence": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "reuse_modes": {
+      "type": "array",
+      "items": {"enum": ["direct_reuse", "transformation", "aggregation", "inference", "automation", "migration", "monitoring", "research"]}
+    },
+    "decision": {
+      "type": "object",
+      "required": ["label", "reason"],
+      "properties": {
+        "label": {"enum": ["KILL", "WATCH", "PURSUE", "RESEARCH"]},
+        "reason": {"type": "string"}
+      }
+    }
+  }
+}
