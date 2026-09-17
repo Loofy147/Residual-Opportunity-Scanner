@@ -237,3 +237,32 @@ It is:
 > "We can repeatedly identify a current, evidence-backed problem caused by residual infrastructure, explain the causal chain, and produce a defensible intervention with measurable value."
 
 That is the threshold for moving from archaeology to a real opportunity scanner.
+
+## 10. Measurement-hardening correction — 2026-09-17
+
+The first v2 implementation contained a contract contradiction: the documentation required missing evidence to remain `UNKNOWN`, while the v2 signal schema accepted only integers `0..5`. This would have forced the 42-case migration either to invent values or to collapse UNKNOWN into zero.
+
+This was corrected before corpus migration.
+
+### Implemented
+
+- v2 signals now accept `null` for UNKNOWN.
+- UNKNOWN is not equivalent to zero.
+- `current_pressure = 0` remains a hard invariant: `current_opportunity = 0`.
+- `current_pressure = UNKNOWN` propagates to `current_opportunity = UNKNOWN`.
+- Missing solution/friction inputs propagate UNKNOWN instead of producing a partial numeric score.
+- `structural_value` and `friction` independently remain UNKNOWN when their own required inputs are missing.
+- The v2 schema now permits nullable measurement outputs where reproducibility is impossible.
+- Added strict corpus validation for schema, duplicate IDs, evidence URI syntax, score reproducibility, strata, controls, and impossible `PURSUE` states.
+- Added unit tests for unknown propagation, legal/demand gates, malformed JSON, duplicate IDs, and score reproduction.
+- Added GitHub Actions workflow for unit tests and canonical schema validation.
+
+### Verification boundary
+
+The updated measurement/validator code was executed in the analysis environment and passed **12 tests**.
+
+The GitHub commit `1726b08bee7b9900739d6f1537104e67e53169bd` is now the head of the open PR. GitHub currently reports no workflow runs or status checks for that commit, so CI execution is not yet treated as independently verified.
+
+### Corpus boundary
+
+The committed 42-case corpus remains the historical v1 material. It has **not** been silently rewritten into v2 by this hardening commit. The next step is an explicit v1 -> v2 migration artifact that preserves unknowns, recomputes scores deterministically, and records the migration provenance before any M0 opportunity-rate interpretation.
