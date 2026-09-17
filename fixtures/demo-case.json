@@ -1,0 +1,34 @@
+{
+  "case_id": "DEMO-LEGACY-API",
+  "subject": "Example legacy API",
+  "subject_type": "deprecated_api",
+  "status": "candidate",
+  "description": "Synthetic fixture only; no external claim is implied.",
+  "evidence": [
+    {
+      "evidence_id": "E1",
+      "claim": "The API has a published deprecation notice.",
+      "source": "https://example.com/deprecation",
+      "status": "USER_REPORTED",
+      "notes": "Synthetic placeholder; replace with a verified source before scoring a real case."
+    }
+  ],
+  "signals": {
+    "dependency": 4,
+    "migration_pressure": 4,
+    "substitution_gap": 3,
+    "reuse_leverage": 4,
+    "differentiation": 3,
+    "legal_friction": 0,
+    "verification_cost": 1
+  },
+  "scores": {
+    "opportunity": 68,
+    "confidence": 0.2
+  },
+  "reuse_modes": ["migration", "automation"],
+  "decision": {
+    "label": "RESEARCH",
+    "reason": "Synthetic fixture. Real cases require source verification and buyer evidence."
+  }
+}
