@@ -1,0 +1,134 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Loofy147/Residual-Opportunity-Scanner/schema/opportunity-case.v2.schema.json",
+  "title": "Residual Opportunity Case v2",
+  "type": "object",
+  "required": [
+    "case_id",
+    "subject",
+    "subject_type",
+    "status",
+    "as_of",
+    "evidence",
+    "signals",
+    "assessment",
+    "scores",
+    "decision"
+  ],
+  "properties": {
+    "case_id": {"type": "string", "pattern": "^[A-Z0-9][A-Z0-9._-]+$"},
+    "subject": {"type": "string", "minLength": 1},
+    "subject_type": {
+      "enum": [
+        "deprecated_api", "dataset", "namespace", "domain", "dns_record",
+        "certificate", "host", "service", "repository", "registry_entry",
+        "web_graph_node", "endpoint", "other"
+      ]
+    },
+    "status": {"enum": ["candidate", "verified", "rejected", "watch", "pursue"]},
+    "as_of": {"type": "string", "format": "date"},
+    "description": {"type": "string", "minLength": 1},
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["evidence_id", "claim", "source", "status", "source_role"],
+        "properties": {
+          "evidence_id": {"type": "string"},
+          "claim": {"type": "string", "minLength": 1},
+          "source": {"type": "string", "format": "uri"},
+          "observed_at": {"type": "string", "format": "date"},
+          "status": {
+            "enum": [
+              "ESTABLISHED", "EXPERIMENTALLY_SUPPORTED", "USER_REPORTED",
+              "INFERENCE", "HYPOTHESIS", "CONTRADICTED", "UNKNOWN", "OPEN"
+            ]
+          },
+          "source_role": {
+            "enum": ["PRIMARY_OFFICIAL", "REGISTRY", "FIRST_PARTY_REPO", "MEASUREMENT", "SECONDARY"]
+          },
+          "notes": {"type": "string"},
+          "limitations": {"type": "string"}
+        }
+      }
+    },
+    "signals": {
+      "type": "object",
+      "required": [
+        "current_pressure",
+        "dependency",
+        "demand_signal",
+        "substitution_gap",
+        "intervention_specificity",
+        "reuse_leverage",
+        "differentiation",
+        "legal_friction",
+        "verification_cost",
+        "delivery_complexity"
+      ],
+      "properties": {
+        "current_pressure": {"type": "integer", "minimum": 0, "maximum": 5},
+        "dependency": {"type": "integer", "minimum": 0, "maximum": 5},
+        "demand_signal": {"type": "integer", "minimum": 0, "maximum": 5},
+        "substitution_gap": {"type": "integer", "minimum": 0, "maximum": 5},
+        "intervention_specificity": {"type": "integer", "minimum": 0, "maximum": 5},
+        "reuse_leverage": {"type": "integer", "minimum": 0, "maximum": 5},
+        "differentiation": {"type": "integer", "minimum": 0, "maximum": 5},
+        "legal_friction": {"type": "integer", "minimum": 0, "maximum": 5},
+        "verification_cost": {"type": "integer", "minimum": 0, "maximum": 5},
+        "delivery_complexity": {"type": "integer", "minimum": 0, "maximum": 5}
+      }
+    },
+    "assessment": {
+      "type": "object",
+      "required": [
+        "target_user",
+        "pain_statement",
+        "intervention",
+        "ownership_status",
+        "authorization_status",
+        "license_status",
+        "lawful_reuse_status",
+        "historical_control",
+        "negative_control"
+      ],
+      "properties": {
+        "target_user": {"type": "string", "minLength": 1},
+        "pain_statement": {"type": "string", "minLength": 1},
+        "intervention": {"type": "string", "minLength": 1},
+        "buyer_evidence_ids": {"type": "array", "items": {"type": "string"}},
+        "ownership_status": {"enum": ["KNOWN", "UNKNOWN", "THIRD_PARTY", "CONSENSUAL_TRANSFER"]},
+        "authorization_status": {"enum": ["AUTHORIZED", "UNKNOWN", "NOT_AUTHORIZED", "NOT_APPLICABLE"]},
+        "license_status": {"enum": ["CLEAR", "RESTRICTED", "UNKNOWN", "NOT_APPLICABLE"]},
+        "lawful_reuse_status": {"enum": ["CLEAR", "CONDITIONAL", "UNKNOWN", "NOT_REUSABLE"]},
+        "historical_control": {"type": "boolean"},
+        "negative_control": {"type": "boolean"}
+      }
+    },
+    "scores": {
+      "type": "object",
+      "required": ["current_opportunity", "structural_value", "friction", "confidence"],
+      "properties": {
+        "current_opportunity": {"type": "number", "minimum": 0, "maximum": 100},
+        "structural_value": {"type": "number", "minimum": 0, "maximum": 100},
+        "friction": {"type": "number", "minimum": 0, "maximum": 100},
+        "confidence": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "reuse_modes": {
+      "type": "array",
+      "items": {
+        "enum": ["direct_reuse", "transformation", "aggregation", "inference", "automation", "migration", "monitoring", "research"]
+      }
+    },
+    "decision": {
+      "type": "object",
+      "required": ["label", "reason"],
+      "properties": {
+        "label": {"enum": ["KILL", "WATCH", "PURSUE", "RESEARCH"]},
+        "reason": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}
