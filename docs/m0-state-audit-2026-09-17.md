@@ -265,4 +265,25 @@ The GitHub commit `1726b08bee7b9900739d6f1537104e67e53169bd` is now the head of 
 
 ### Corpus boundary
 
-The committed 42-case corpus remains the historical v1 material. It has **not** been silently rewritten into v2 by this hardening commit. The next step is an explicit v1 -> v2 migration artifact that preserves unknowns, recomputes scores deterministically, and records the migration provenance before any M0 opportunity-rate interpretation.
+The committed 42-case corpus remains the historical v1 material. It has **not** been silently rewritten into v2 by this hardening commit.
+
+## 11. Migration contract — 2026-09-17
+
+A conservative v1 -> v2 migration implementation is now present.
+
+### Rules
+
+- Only semantically matching v1 signals are carried forward: `dependency`, `substitution_gap`, `reuse_leverage`, `differentiation`, `legal_friction`, and `verification_cost`.
+- v1 `migration_pressure` is **not** silently renamed to v2 `current_pressure`; it is retained under immutable migration provenance.
+- `current_pressure`, `demand_signal`, `intervention_specificity`, and `delivery_complexity` become `UNKNOWN` until separately established.
+- Buyer/user fields and lawful-reuse states become `UNKNOWN` rather than inferred.
+- Historical/negative control flags remain false until explicitly classified from evidence.
+- Legacy scores and decision labels are preserved only in migration metadata.
+- Migrated cases receive provisional `RESEARCH` decisions and require explicit v2 reassessment; old `PURSUE`/`WATCH` labels are not allowed to silently survive as new decisions.
+- Output is written to a separate v2 corpus and refuses to overwrite existing migration output.
+
+### Verification
+
+The migration contract was exercised on a synthetic v1 case and passed. The full 42-case corpus has **not** yet been materialized as v2 in the repository. That remains the next data operation.
+
+The open PR head is now `ef9cd5031c0789ed56113cce4fc1135f1ac60118`. It is open and GitHub currently reports it as mergeable, but no GitHub Actions workflow run/status is exposed for the new head yet.
