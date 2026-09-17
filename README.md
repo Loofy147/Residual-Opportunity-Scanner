@@ -79,7 +79,7 @@ Raw observations, claims, evidence, scores, and decisions remain distinct object
 ```text
 schema/        canonical case schemas
 src/           deterministic scoring/domain logic
- tests/        unit tests
+tests/         unit tests
 fixtures/      small synthetic examples
 research/      evidence, corpus, and experiment notes
 docs/          protocol and design decisions
