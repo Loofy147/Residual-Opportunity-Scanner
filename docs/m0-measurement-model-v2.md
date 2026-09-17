@@ -11,30 +11,40 @@ Historical controls demonstrated that structural value can remain high after cur
 
 ## Signals
 
-All signals use a 0–5 ordinal scale and require evidence or an explicit `UNKNOWN`/low score.
-
-### Need / present pressure
+All signals use a 0–5 ordinal scale. `null` means **UNKNOWN** and must be preserved when the evidence does not establish a defensible value. Unknown is not equivalent to zero.
 
 - `current_pressure`: current lifecycle/operational pressure caused by the residual state.
 - `dependency`: observed dependence on the subject by existing software/users/registry relationships.
 - `demand_signal`: direct or strong public evidence that someone currently wants the problem solved.
-
-### Solution fit
-
 - `substitution_gap`: how incomplete, costly, or incompatible the available replacement is.
 - `intervention_specificity`: how clearly a concrete intervention can be defined.
 - `reuse_leverage`: how much existing state/capability reduces implementation cost.
 - `differentiation`: how difficult the intervention would be to commoditize or replace immediately.
-
-### Friction
-
 - `legal_friction`: ownership/authorization/license barrier.
 - `verification_cost`: cost of proving the relevant facts.
 - `delivery_complexity`: implementation/operations burden of the intervention.
 
-## Derived scores
+## Unknown propagation
 
-### Current opportunity
+A migration must not invent missing signal values.
+
+Therefore:
+
+```text
+current_pressure = 0
+    -> current_opportunity = 0
+
+current_pressure = UNKNOWN
+    -> current_opportunity = UNKNOWN
+
+current_pressure > 0
++ any required need/solution/friction input UNKNOWN
+    -> current_opportunity = UNKNOWN
+```
+
+Structural value and friction remain independently calculable when their own inputs are known.
+
+## Derived scores
 
 ```text
 need =
@@ -59,19 +69,15 @@ current_opportunity =
 
 Values are normalized to 0–100.
 
-Hard rule:
+Structural value is reported separately from current opportunity:
 
 ```text
-current_pressure == 0 -> current_opportunity == 0
+structural_value =
+  0.35 * reuse_leverage
++ 0.25 * differentiation
++ 0.20 * substitution_gap
++ 0.20 * intervention_specificity
 ```
-
-This prevents historical controls from looking commercially current merely because they are structurally interesting.
-
-### Structural value
-
-Structural value is reported separately from current opportunity. It measures reuse leverage, differentiation, substitution gap, and intervention specificity. It does not imply present demand.
-
-### Confidence
 
 Confidence remains a separate evidence judgment. It is never silently multiplied into opportunity score.
 
@@ -79,14 +85,17 @@ Confidence remains a separate evidence judgment. It is never silently multiplied
 
 The score ranks investigation priority. It does not create a commercial conclusion.
 
-A `PURSUE` case still requires:
+`PURSUE` additionally requires:
 
 - a named target user/buyer class;
 - a concrete pain statement;
 - a concrete intervention;
-- current-pressure evidence;
-- demand evidence or a clearly marked `UNKNOWN` state;
-- explicit ownership/authorization/license assessment.
+- established current-pressure evidence;
+- a positive demand signal backed by buyer/pain evidence;
+- known ownership state;
+- acceptable authorization/license/lawful-reuse state.
+
+A high score alone never creates `PURSUE`.
 
 ## Controls
 
@@ -103,7 +112,7 @@ Examples:
 
 ## Interpretation rule
 
-The scanner is successful only if it can distinguish these classes reliably:
+The scanner is successful only if it can distinguish:
 
 ```text
 interesting residual state

@@ -16,21 +16,86 @@ def base_signals() -> SignalsV2:
     )
 
 
-def test_historical_control_has_zero_current_opportunity():
-    signals = base_signals()
-    historical = SignalsV2(
+def test_zero_current_pressure_is_hard_zero_even_with_unknown_other_signals():
+    signals = SignalsV2(
         current_pressure=0,
-        dependency=signals.dependency,
-        demand_signal=signals.demand_signal,
-        substitution_gap=signals.substitution_gap,
-        intervention_specificity=signals.intervention_specificity,
-        reuse_leverage=signals.reuse_leverage,
-        differentiation=signals.differentiation,
-        legal_friction=signals.legal_friction,
-        verification_cost=signals.verification_cost,
-        delivery_complexity=signals.delivery_complexity,
+        dependency=None,
+        demand_signal=None,
+        substitution_gap=3,
+        intervention_specificity=3,
+        reuse_leverage=4,
+        differentiation=3,
+        legal_friction=0,
+        verification_cost=1,
+        delivery_complexity=1,
     )
-    scores = score_v2(historical)
+    scores = score_v2(signals)
+    assert scores["current_opportunity"] == 0.0
+    assert scores["structural_value"] == 67.0
+
+
+def test_unknown_current_pressure_propagates_to_current_opportunity():
+    signals = SignalsV2(
+        current_pressure=None,
+        dependency=4,
+        demand_signal=3,
+        substitution_gap=3,
+        intervention_specificity=3,
+        reuse_leverage=4,
+        differentiation=3,
+        legal_friction=0,
+        verification_cost=1,
+        delivery_complexity=1,
+    )
+    scores = score_v2(signals)
+    assert scores["current_opportunity"] is None
+    assert scores["structural_value"] == 67.0
+
+
+def test_missing_solution_or_friction_input_prevents_current_score():
+    solution_unknown = SignalsV2(
+        current_pressure=4,
+        dependency=4,
+        demand_signal=3,
+        substitution_gap=None,
+        intervention_specificity=3,
+        reuse_leverage=4,
+        differentiation=3,
+        legal_friction=0,
+        verification_cost=1,
+        delivery_complexity=1,
+    )
+    friction_unknown = SignalsV2(
+        current_pressure=4,
+        dependency=4,
+        demand_signal=3,
+        substitution_gap=3,
+        intervention_specificity=3,
+        reuse_leverage=4,
+        differentiation=3,
+        legal_friction=None,
+        verification_cost=1,
+        delivery_complexity=1,
+    )
+    assert score_v2(solution_unknown)["current_opportunity"] is None
+    assert score_v2(friction_unknown)["current_opportunity"] is None
+
+
+def test_historical_control_has_zero_current_opportunity():
+    scores = score_v2(
+        SignalsV2(
+            current_pressure=0,
+            dependency=4,
+            demand_signal=3,
+            substitution_gap=3,
+            intervention_specificity=3,
+            reuse_leverage=4,
+            differentiation=3,
+            legal_friction=0,
+            verification_cost=1,
+            delivery_complexity=1,
+        )
+    )
     assert scores["current_opportunity"] == 0.0
     assert scores["structural_value"] > 0.0
 
