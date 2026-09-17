@@ -17,7 +17,7 @@
     },
     "status": {"enum": ["candidate", "verified", "rejected", "watch", "pursue"]},
     "as_of": {"type": "string", "format": "date"},
-    "description": {"type": "string", "minLength": 1},
+    "description": {"type": ["string", "null"]},
     "evidence": {
       "type": "array",
       "minItems": 1,
@@ -93,6 +93,23 @@
       "properties": {
         "label": {"enum": ["KILL", "WATCH", "PURSUE", "RESEARCH"]},
         "reason": {"type": "string", "minLength": 1}
+      }
+    },
+    "migration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_format", "source_file", "source_line", "migration_date", "legacy_status", "legacy_decision_label", "legacy_decision_reason", "legacy_scores", "legacy_signals", "unknown_signal_reason"],
+      "properties": {
+        "source_format": {"const": "opportunity-case.v1"},
+        "source_file": {"type": "string", "minLength": 1},
+        "source_line": {"type": "integer", "minimum": 1},
+        "migration_date": {"type": "string", "format": "date"},
+        "legacy_status": {"type": "string"},
+        "legacy_decision_label": {"type": ["string", "null"]},
+        "legacy_decision_reason": {"type": ["string", "null"]},
+        "legacy_scores": {"type": "object"},
+        "legacy_signals": {"type": "object"},
+        "unknown_signal_reason": {"type": "object", "additionalProperties": {"type": "string"}}
       }
     }
   }
