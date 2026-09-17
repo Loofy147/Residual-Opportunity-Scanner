@@ -4,12 +4,20 @@ Evidence-first discovery of reusable value in residual, obsolete, deprecated, or
 
 ## Current objective
 
-M0 is not a general internet crawler. It tests whether a small, auditable corpus can reveal commercially actionable residual opportunities.
+M0 is not a general internet crawler. It tests whether a small, auditable corpus can reveal repeatable, evidence-backed opportunities created by surviving residual state, identity, relationships, or dependencies.
+
+The original research question was:
+
+> What internet primitives have survived long enough to become overlooked, and what value remains when they are recomposed for present use?
+
+The operational equivalent is narrower:
+
+> Where does residual infrastructure create current, defensible friction for a present user, and can that friction be converted into a concrete intervention?
 
 We currently investigate three classes:
 
 1. **Migration archaeology** — deprecated APIs/datasets with surviving consumers and replacement gaps.
-2. **Namespace archaeology** — abandoned or contested package/project identities with current demand.
+2. **Namespace archaeology** — abandoned or contested package/project identities with current demand or governance friction.
 3. **Residual graph** — historical web/infrastructure relationships whose surviving references create actionable information.
 
 ## Core principle
@@ -23,8 +31,28 @@ Target corpus: 100 cases.
 - 40 deprecated APIs/datasets
 - 30 package/project namespaces
 - 30 historical web/infrastructure cases
+- at least 15 negative/historical control cases across the strata
 
-Every case must be evidence-backed and scored through the same schema. A high score is not a claim of value; it is a prioritization signal for manual verification.
+Current corpus snapshot: **42 cases** committed in three batches (16 APIs/datasets, 16 namespace cases, 10 web/infrastructure cases).
+
+Every case must be evidence-backed and scored through the same schema. A high score is a prioritization signal only; it is not a claim of demand, ownership, legality, or commercial success.
+
+## Measurement model
+
+`OpportunityCase v2` separates:
+
+- current pressure;
+- dependency;
+- demand signal;
+- substitution gap;
+- intervention specificity;
+- structural reuse/differentiation;
+- legal/verification/delivery friction;
+- confidence.
+
+Historical controls with zero current pressure must receive zero current-opportunity priority even when structurally interesting.
+
+See `docs/m0-state-audit-2026-09-17.md` and `docs/m0-measurement-model-v2.md`.
 
 ## Evidence status
 
@@ -33,7 +61,7 @@ Use: `ESTABLISHED`, `EXPERIMENTALLY_SUPPORTED`, `USER_REPORTED`, `INFERENCE`, `H
 ## Planned pipeline
 
 ```text
-Discovery -> Verification -> Enrichment -> Scoring -> Manual audit -> Decision
+Discovery -> Verification -> Enrichment -> Current-pressure assessment -> Scoring -> Manual audit -> Decision
 ```
 
 Raw observations, claims, evidence, scores, and decisions remain distinct objects.
@@ -41,17 +69,18 @@ Raw observations, claims, evidence, scores, and decisions remain distinct object
 ## Non-goals for M0
 
 - No opportunistic takeover or exploitation of third-party infrastructure.
-- No large crawler before the scoring model is validated.
+- No large crawler before the measurement model is validated.
 - No autonomous agent swarm.
 - No claim that an identified resource is legally reusable without explicit evidence.
+- No commercial conclusion from lifecycle/deprecation evidence alone.
 
 ## Repository layout
 
 ```text
-schema/        canonical case schema
+schema/        canonical case schemas
 src/           deterministic scoring/domain logic
-tests/         unit tests
+ tests/        unit tests
 fixtures/      small synthetic examples
-research/      evidence and experiment notes
+research/      evidence, corpus, and experiment notes
 docs/          protocol and design decisions
 ```
