@@ -52,6 +52,21 @@ The MCP registry cases show measurable state surviving after the underlying rela
 
 These are candidates for registry-health and lifecycle intelligence rather than appropriation of third-party resources.
 
+## Scoring limitation discovered
+
+The historical YouTube Analytics v1→v2 control case receives a relatively high raw opportunity score even though `migration_pressure=0`. Its decision is `RESEARCH`, not `PURSUE`, but the numeric score remains high because the current scorer sums several positive structural signals without a time/currentness gate.
+
+Therefore the current score must not be interpreted as present-day commercial opportunity. Before M0 ranking, evaluate a revised model that explicitly separates:
+
+- currentness / active pressure;
+- dependency or demand;
+- substitution gap;
+- reuse leverage;
+- differentiation;
+- legal and verification friction.
+
+The control case is retained because it exposed this failure mode rather than being removed as inconvenient evidence.
+
 ## Current experimental interpretation
 
 `PURSUE` signals are clustering around **migration tooling** and **infrastructure/registry health** rather than abandoned-asset acquisition.
